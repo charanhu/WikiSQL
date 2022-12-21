@@ -29,7 +29,7 @@ def annotate(sentence, lower=True):
         'gloss': gloss,
         'words': words,
         'after': after,
-        }
+    }
 
 
 def annotate_example(example, table):
@@ -42,8 +42,10 @@ def annotate_example(example, table):
     for c in ann['query']['conds']:
         c[-1] = annotate(str(c[-1]))
 
-    q1 = 'SYMSELECT SYMAGG {} SYMCOL {}'.format(Query.agg_ops[sql['agg']], table['header'][sql['sel']])
-    q2 = ['SYMCOL {} SYMOP {} SYMCOND {}'.format(table['header'][col], Query.cond_ops[op], detokenize(cond)) for col, op, cond in sql['conds']]
+    q1 = 'SYMSELECT SYMAGG {} SYMCOL {}'.format(
+        Query.agg_ops[sql['agg']], table['header'][sql['sel']])
+    q2 = ['SYMCOL {} SYMOP {} SYMCOND {}'.format(
+        table['header'][col], Query.cond_ops[op], detokenize(cond)) for col, op, cond in sql['conds']]
     if q2:
         q2 = 'SYMWHERE ' + ' SYMAND '.join(q2) + ' SYMEND'
     else:
@@ -73,13 +75,15 @@ def is_valid_example(e):
     input_vocab = set(e['seq_input']['words'])
     for w in e['seq_output']['words']:
         if w not in input_vocab:
-            print('query word "{}" is not in input vocabulary.\n{}'.format(w, e['seq_input']['words']))
+            print('query word "{}" is not in input vocabulary.\n{}'.format(
+                w, e['seq_input']['words']))
             return False
     input_vocab = set(e['question']['words'])
     for col, op, cond in e['query']['conds']:
         for w in cond['words']:
             if w not in input_vocab:
-                print('cond word "{}" is not in input vocabulary.\n{}'.format(w, e['question']['words']))
+                print('cond word "{}" is not in input vocabulary.\n{}'.format(
+                    w, e['question']['words']))
                 return False
     return True
 
@@ -114,9 +118,11 @@ if __name__ == '__main__':
                     raise Exception(str(a))
 
                 gold = Query.from_tokenized_dict(a['query'])
-                reconstruct = Query.from_sequence(a['seq_output'], a['table'], lowercase=True)
+                reconstruct = Query.from_sequence(
+                    a['seq_output'], a['table'], lowercase=True)
                 if gold.lower() != reconstruct.lower():
-                    raise Exception ('Expected:\n{}\nGot:\n{}'.format(gold, reconstruct))
+                    raise Exception(
+                        'Expected:\n{}\nGot:\n{}'.format(gold, reconstruct))
                 fo.write(json.dumps(a) + '\n')
                 n_written += 1
             print('wrote {} examples'.format(n_written))

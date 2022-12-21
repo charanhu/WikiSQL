@@ -12,7 +12,8 @@ if __name__ == '__main__':
     parser.add_argument('source_file', help='source file for the prediction')
     parser.add_argument('db_file', help='source database for the prediction')
     parser.add_argument('pred_file', help='predictions by the model')
-    parser.add_argument('--ordered', action='store_true', help='whether the exact match should consider the order of conditions')
+    parser.add_argument('--ordered', action='store_true',
+                        help='whether the exact match should consider the order of conditions')
     args = parser.parse_args()
 
     engine = DBEngine(args.db_file)
@@ -39,4 +40,4 @@ if __name__ == '__main__':
         print(json.dumps({
             'ex_accuracy': sum(grades) / len(grades),
             'lf_accuracy': sum(exact_match) / len(exact_match),
-            }, indent=2))
+        }, indent=2))
